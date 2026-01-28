@@ -21,6 +21,12 @@ def create_app(config_object=None):
 
     # 注册蓝图（控制器层）
     app.register_blueprint(api_bp, url_prefix='/api')
+    # 注册 UI 蓝图（非 /api 路由，如 /convert）
+    try:
+        from controller import ui_bp
+        app.register_blueprint(ui_bp)
+    except Exception:
+        pass
 
     # 顶级 UI 路由
     @app.route('/')

@@ -1,0 +1,69 @@
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>Word → PDF 转换</title>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <div class="card" style="max-width:900px;margin:28px auto;">
+      <h1>Word → PDF 转换</h1>
+      <p>支持预览与选择要转换的页面（页面格式示例：1-3,5）。</p>
+
+      <form id="convert-form" action="/convert" method="post" enctype="multipart/form-data">
+        <label>选择 Word 文件（.doc/.docx）</label>
+        <input type="file" name="file" id="file-input" accept=".doc,.docx" required />
+
+        <label>选择页面（可选）</label>
+        <input type="text" name="pages" id="pages-input" placeholder="例如：1-3,5" />
+
+        <div class="actions">
+          <button type="button" id="preview-btn" class="btn">预览</button>
+          <button type="submit" name="action" value="download" class="btn">下载 PDF</button>
+        </div>
+      </form>
+
+      <div id="preview-area" style="margin-top:16px;display:none">
+        <h3>预览</h3>
+        <iframe id="preview-frame" style="width:100%;height:600px;border:1px solid #ddd;border-radius:6px"></iframe>
+      </div>
+    </div>
+
+    <script>
+    const previewBtn = document.getElementById('preview-btn');
+    const form = document.getElementById('convert-form');
+    const previewArea = document.getElementById('preview-area');
+    const previewFrame = document.getElementById('preview-frame');
+
+    previewBtn.addEventListener('click', async () => {
+      const fileInput = document.getElementById('file-input');
+      if (!fileInput.files.length) { alert('请选择文件'); return; }
+
+      const fd = new FormData(form);
+      fd.set('action', 'preview');
+
+      previewBtn.disabled = true;
+      previewBtn.textContent = '生成预览...';
+
+      try {
+        const resp = await fetch('/convert', { method: 'POST', body: fd });
+        if (!resp.ok) {
+          const txt = await resp.text();
+          alert('转换失败: ' + txt);
+          return;
+        }
+        const blob = await resp.blob();
+        const url = URL.createObjectURL(blob);
+        previewFrame.src = url;
+        previewArea.style.display = '';
+      } catch (e) {
+        alert('转换或预览失败: ' + e);
+      } finally {
+        previewBtn.disabled = false;
+        previewBtn.textContent = '预览';
+      }
+    });
+    </script>
+  </body>
+</html>

@@ -3,3 +3,5 @@ Flask-SQLAlchemy
 Flask-Migrate
 Flask-Cors
 PyJWT>=2.0
+docx2pdf
+pypdf

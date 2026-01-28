@@ -22,3 +22,17 @@ small{color:#666}
 .main{flex:1;background:#fff;padding:16px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
 .tab-content{display:none}
 .tab-content.active{display:block}
+
+/* Tool list styles */
+.tool-list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.tool-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #eee;border-radius:8px;background:#fafafa}
+.tool-item h3{margin:0;font-size:16px}
+.tool-item p{margin:4px 12px 0;color:#666;font-size:13px;flex:1}
+.btn{display:inline-block;padding:8px 14px;background:#007bff;color:#fff;border-radius:6px;text-decoration:none;border:1px solid #0073e6}
+.btn.secondary{background:#6c757d;border-color:#6a6f73}
+.btn:active{transform:translateY(1px)}
+
+/* Convert page specific */
+.card h1{font-size:20px;margin-bottom:6px}
+.card p{color:#666;margin-top:0}
+#preview-frame{background:#fff}

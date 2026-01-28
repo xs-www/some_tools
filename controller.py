@@ -1,8 +1,62 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template, send_file, after_this_request
+import traceback
+import tempfile
+import shutil
+import os
+from werkzeug.utils import secure_filename
+from service import AuthService, ConvertService
 import traceback
 from service import AuthService
 
 api_bp = Blueprint('api', __name__)
+
+# UI blueprint for non-API pages (upload/convert etc.)
+ui_bp = Blueprint('ui', __name__)
+
+
+@ui_bp.route('/convert', methods=['GET', 'POST'])
+def convert_view():
+    """控制层：处理上传、调用 ConvertService 并返回 PDF（预览或下载）。"""
+    if request.method == 'GET':
+        return render_template('convert.html')
+
+    upload = request.files.get('file')
+    if not upload:
+        return 'No file uploaded', 400
+
+    filename = secure_filename(upload.filename)
+    if not filename:
+        return 'Invalid filename', 400
+
+    # 可选参数：pages=1-3,5 ; action=preview|download
+    pages = request.form.get('pages') or None
+    action = request.form.get('action') or 'download'
+
+    tmpdir = tempfile.mkdtemp(prefix='docconvert_')
+    input_path = os.path.join(tmpdir, filename)
+    upload.save(input_path)
+
+    service = ConvertService()
+    try:
+        pdf_path = service.convert_docx_to_pdf(input_path, tmpdir, pages=pages)
+    except Exception as e:
+        # 打印完整堆栈以便调试
+        traceback.print_exc()
+        shutil.rmtree(tmpdir, ignore_errors=True)
+        return f'Conversion failed: {e}', 500
+
+    pdf_filename = os.path.basename(pdf_path)
+
+    @after_this_request
+    def cleanup(response):
+        try:
+            shutil.rmtree(tmpdir)
+        except Exception:
+            pass
+        return response
+
+    as_attachment = True if action == 'download' else False
+    return send_file(pdf_path, as_attachment=as_attachment, download_name=pdf_filename)
 
 
 # 在这里可以注册各个子蓝图或视图函数
