@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}登录 / 注册{% endblock %}
+{% block content %}
+  <div class="card">
+    <h1>示例：注册 / 登录</h1>
+    <div class="tabs">
+      <button id="tab-login" class="active">登录</button>
+      <button id="tab-register">注册</button>
+    </div>
+
+    <div id="form-area">
+      <!-- 表单由 JS 渲染 -->
+    </div>
+
+    <div id="message"></div>
+
+    <p style="margin-top:14px;"><small>说明：这是前端示例，调用后端 API：/api/register 与 /api/login。默认假定后端运行在 http://localhost:8080。</small></p>
+  </div>
+{% endblock %}

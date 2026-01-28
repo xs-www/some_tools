@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}用户主页{% endblock %}
+{% block content %}
+<div class="home-layout">
+  <aside class="sidebar">
+    <div class="profile">
+      <div class="avatar" id="avatar"></div>
+      <div class="username" id="profile-username"></div>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-tab="tools">小工具</button>
+      <button class="nav-item" data-tab="settings">设置</button>
+    </nav>
+  </aside>
+  <main class="main">
+    <div id="tab-tools" class="tab-content active">
+      <h2>小工具</h2>
+      <p>这里展示你的小工具列表或入口。</p>
+    </div>
+    <div id="tab-settings" class="tab-content">
+      <h2>设置</h2>
+      <p>用户设置区域（示例）。</p>
+    </div>
+  </main>
+</div>
+{% endblock %}
