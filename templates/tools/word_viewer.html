@@ -40,7 +40,7 @@
       previewBtn.textContent = '生成预览...';
 
       try {
-        const resp = await fetch('/convert', { method: 'POST', body: fd });
+        const resp = await fetch('/api/tools/word_viewer/pre_view', { method: 'POST', body: fd });
         if (!resp.ok) {
           const txt = await resp.text();
           alert('转换失败: ' + txt);

@@ -7,7 +7,7 @@
     if(!btn) return
     btn.addEventListener('click', function(){
       try{ localStorage.removeItem('token'); localStorage.removeItem('user'); }catch(e){}
-      window.location.href = '/login'
+      window.location.href = '/ui/login'
     })
   }
 

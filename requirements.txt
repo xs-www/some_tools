@@ -5,3 +5,4 @@ Flask-Cors
 PyJWT>=2.0
 docx2pdf
 pypdf
+python-docx

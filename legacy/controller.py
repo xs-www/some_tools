@@ -15,7 +15,6 @@ api_bp = Blueprint('api', __name__)
 # UI blueprint for non-API pages (upload/convert etc.)
 ui_bp = Blueprint('ui', __name__)
 
-
 @ui_bp.route('/convert', methods=['GET', 'POST'])
 def convert_view():
     """控制层：处理上传、调用 ConvertService 并返回 PDF（预览或下载）。"""
