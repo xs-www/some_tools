@@ -1,4 +1,4 @@
-from mapper import UserDAO
+from mapper import UserDAO, ToolDAO, FavoriteDAO
 from werkzeug.security import check_password_hash, generate_password_hash
 import importlib
 from datetime import datetime, timedelta
@@ -79,11 +79,11 @@ class AuthService(BaseService):
             return token
 
     def login(self, username: str, password: str):
-        """登录逻辑：返回用户 dict 或抛出 ValueError。成功时返回 (user_dict, token)。"""
+        """登录逻辑：返回用户 dict（包含 token）或抛出 ValueError。"""
         if not username or not password:
             raise ValueError('username and password required')
 
-        user = UserDAO.get_user(username)
+        user = UserDAO.get_user_by_username(username)
         if not user:
             raise ValueError('invalid credentials')
 
@@ -96,16 +96,11 @@ class AuthService(BaseService):
         return result
 
     def register(self, username: str, password: str):
-        """注册逻辑：
-        - 参数校验
-        - 检查用户是否已存在
-        - 生成密码哈希并创建用户
-        返回用户 dict 或抛出 ValueError（400/409）
-        """
+        """注册逻辑：使用新的 UserDAO 接口。"""
         if not username or not password:
             raise ValueError('username and password required')
 
-        existing = UserDAO.get_user(username)
+        existing = UserDAO.get_user_by_username(username)
         if existing:
             raise ValueError('user already exists')
 
@@ -117,7 +112,7 @@ class AuthService(BaseService):
         """检查用户名是否可用，username 为空抛出 ValueError，返回 True 表示可用。"""
         if not username:
             raise ValueError('username required')
-        existing = UserDAO.get_user(username)
+        existing = UserDAO.get_user_by_username(username)
         return existing is None
 
     def verify_token(self, token: str):
@@ -137,6 +132,57 @@ class AuthService(BaseService):
                 return None
             except Exception:
                 return None
+
+
+class ToolService(BaseService):
+    """工具相关业务：列出、获取、创建、删除工具（开发者权限）。"""
+
+    def list_tools(self):
+        return ToolDAO.list_tools()
+
+    def get_tool(self, tool_id: int):
+        t = ToolDAO.get_tool_by_id(tool_id)
+        return t.to_dict() if t else None
+
+    def create_tool(self, slug: str, title: str, description: str = None, route: str = None, icon: str = None, tags: str = None):
+        tool = ToolDAO.create_tool(slug, title, description, route, icon, tags)
+        return tool.to_dict()
+
+    def delete_tool(self, tool_id: int):
+        return ToolDAO.delete_tool(tool_id)
+
+
+class FavoriteService(BaseService):
+    """收藏相关业务。"""
+
+    def list_user_favorites(self, username: str):
+        user = UserDAO.get_user_by_username(username)
+        if not user:
+            raise ValueError('user not found')
+        rows = FavoriteDAO.list_favorites_for_user(user.id)
+        out = []
+        for r in rows:
+            tool = ToolDAO.get_tool_by_id(r['tool_id'])
+            if tool:
+                out.append({'tool': tool.to_dict(), 'created_at': r['created_at']})
+        return out
+
+    def add_favorite(self, username: str, tool_id: int):
+        user = UserDAO.get_user_by_username(username)
+        if not user:
+            raise ValueError('user not found')
+        tool = ToolDAO.get_tool_by_id(tool_id)
+        if not tool:
+            raise ValueError('tool not found')
+        fav = FavoriteDAO.add_favorite(user.id, tool_id)
+        return {'tool': tool.to_dict(), 'created_at': fav.created_at.isoformat()}
+
+    def remove_favorite(self, username: str, tool_id: int):
+        user = UserDAO.get_user_by_username(username)
+        if not user:
+            raise ValueError('user not found')
+        ok = FavoriteDAO.remove_favorite(user.id, tool_id)
+        return ok
 
 
 class ConvertService(BaseService):

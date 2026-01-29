@@ -6,16 +6,47 @@
     <div class="profile">
       <div class="avatar" id="avatar"></div>
       <div class="username" id="profile-username"></div>
+      <button id="btn-logout" class="logout">登出</button>
     </div>
     <nav class="nav">
-      <button class="nav-item active" data-tab="tools">小工具</button>
+      <button class="nav-item active" data-tab="stars">收藏夹</button>
+      <button class="nav-item active" data-tab="tools">文件工具</button>
+      <button class="nav-item" data-tab="others">其他</button>
       <button class="nav-item" data-tab="settings">设置</button>
     </nav>
   </aside>
   <main class="main">
-    <div id="tab-tools" class="tab-content active">
-      <h2>小工具</h2>
-      <p>这里展示你的小工具列表或入口。</p>
+    <div id="tab-stars" class="tab-content active">
+        <h2>收藏夹</h2>
+        <p>这里展示你的收藏夹内容（示例）。</p>
+        {% if tools_by_tab and tools_by_tab.stars %}
+          <div class="tool-grid">
+            {% for t in tools_by_tab.stars %}
+              <div class="tool-card">
+                <div class="tool-icon">{{ t.icon or '🔧' }}</div>
+                <h3>{{ t.title }}</h3>
+                <p>{{ t.description }}</p>
+                {% if t.route %}<a class="btn" href="{{ t.route }}">前往</a>{% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+    </div>
+    <div id="tab-tools" class="tab-content">
+      <h2>文件操作工具</h2>
+      {% if tools_by_tab and tools_by_tab.tools %}
+        <div class="tool-grid">
+          {% for t in tools_by_tab.tools %}
+            <div class="tool-card">
+              <div class="tool-icon">{{ t.icon or '🔧' }}</div>
+              <h3>{{ t.title }}</h3>
+              <p>{{ t.description }}</p>
+              {% if t.route %}<a class="btn" href="{{ t.route }}">前往</a>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+      <p>这里展示你的文件操作工具列表或入口。</p>
       <div class="tool-list">
         <div class="tool-item">
           <h3>Word → PDF 转换</h3>
@@ -23,6 +54,24 @@
           <a class="btn" href="/convert">前往转换</a>
         </div>
       </div>
+      {% endif %}
+    </div>
+    <div id="tab-others" class="tab-content">
+      <h2>其他工具</h2>
+      {% if tools_by_tab and tools_by_tab.others %}
+        <div class="tool-grid">
+          {% for t in tools_by_tab.others %}
+            <div class="tool-card">
+              <div class="tool-icon">{{ t.icon or '🔧' }}</div>
+              <h3>{{ t.title }}</h3>
+              <p>{{ t.description }}</p>
+              {% if t.route %}<a class="btn" href="{{ t.route }}">前往</a>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>这里展示你的其他工具列表或入口。</p>
+      {% endif %}
     </div>
     <div id="tab-settings" class="tab-content">
       <h2>设置</h2>
@@ -30,4 +79,6 @@
     </div>
   </main>
 </div>
+
+<script src="{{ url_for('static', filename='scripts/home.js') }}"></script>
 {% endblock %}

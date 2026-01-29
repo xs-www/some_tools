@@ -156,7 +156,7 @@ async function doLogin(ev){
   }
   else{
     const text = r.data && r.data.error ? r.data.error : (r.error || '请求失败')
-    showMessage(text, 'error')
+    showMessage('用户名或密码错误', 'error')
   }
 }
 

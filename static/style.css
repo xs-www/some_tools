@@ -24,13 +24,25 @@ small{color:#666}
 .tab-content.active{display:block}
 
 /* Tool list styles */
-.tool-list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
-.tool-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #eee;border-radius:8px;background:#fafafa}
-.tool-item h3{margin:0;font-size:16px}
-.tool-item p{margin:4px 12px 0;color:#666;font-size:13px;flex:1}
-.btn{display:inline-block;padding:8px 14px;background:#007bff;color:#fff;border-radius:6px;text-decoration:none;border:1px solid #0073e6}
-.btn.secondary{background:#6c757d;border-color:#6a6f73}
-.btn:active{transform:translateY(1px)}
+.tool-list{display:grid;gap:16px;margin-top:12px}
+.tool-item{background:#fafafa;border:1px solid #eee;padding:12px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.04);display:flex;flex-direction:column;justify-content:space-between}
+.tool-item h3{margin:0 0 8px}
+.tool-item p{margin:0 0 12px;color:#555}
+
+/* 按钮样式 */
+.btn{display:inline-block;padding:8px 12px;background:#007bff;color:#fff;border-radius:6px;text-decoration:none;border:none;cursor:pointer}
+.btn:hover{opacity:0.95}
+
+/* 响应式列数：移动端 1 列，中宽屏 2 列，大屏 3 列 */
+@media (max-width: 699px){
+  .tool-list{grid-template-columns: repeat(1, 1fr)}
+}
+@media (min-width:700px) and (max-width:999px){
+  .tool-list{grid-template-columns: repeat(2, 1fr)}
+}
+@media (min-width:1000px){
+  .tool-list{grid-template-columns: repeat(3, 1fr)}
+}
 
 /* Convert page specific */
 .card h1{font-size:20px;margin-bottom:6px}

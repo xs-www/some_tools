@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}管理员面板{% endblock %}
+{% block content %}
+<div class="admin admin-grid" style="display:flex;gap:20px;align-items:flex-start">
+  <aside class="admin-sidebar" style="width:320px;">
+    <div id="admin-stats" style="padding:12px;background:#f7f7f7;border-radius:6px;margin-bottom:12px">
+      <h3>统计</h3>
+      <div id="stat-total">总工具: 0</div>
+      <div id="stat-by-tag" style="margin-top:8px"></div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <h3 style="margin:0">已存在工具</h3>
+      <button id="btn-refresh">刷新</button>
+    </div>
+    <div id="tool-list" style="max-height:60vh;overflow:auto;border-top:1px solid #eee;padding-top:8px"></div>
+  </aside>
+
+  <main class="admin-main" style="flex:1;">
+    <section class="admin-form">
+      <h2 id="form-heading">注册/编辑工具</h2>
+      <form id="tool-form">
+        <label>Slug（唯一）</label>
+        <input id="input-slug" name="slug" required />
+
+        <label>标题</label>
+        <input id="input-title" name="title" required />
+
+        <label>描述</label>
+        <textarea id="input-description" name="description"></textarea>
+
+        <label>路由（如 /convert/word2pdf）</label>
+        <input id="input-route" name="route" />
+
+        <label>图标（可选）</label>
+        <input id="input-icon" name="icon" />
+
+        <label>标签（逗号分隔）</label>
+        <input id="input-tags" name="tags" />
+
+        <div style="margin-top:8px">
+          <button id="btn-submit" type="submit">提交</button>
+          <button id="btn-clear" type="button">清空</button>
+        </div>
+        <div id="form-msg" style="margin-top:8px;color:red"></div>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script src="{{ url_for('static', filename='admin.js') }}"></script>
+
+{% endblock %}

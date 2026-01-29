@@ -10,5 +10,8 @@
   {% block content %}{% endblock %}
 
   <script src="{{ url_for('static', filename='app.js') }}"></script>
+  {% if auto_script %}
+    <script src="{{ url_for('static', filename=auto_script) }}"></script>
+  {% endif %}
 </body>
 </html>
