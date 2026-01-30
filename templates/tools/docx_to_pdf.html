@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>Word → PDF 转换</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="card" style="max-width:900px;margin:28px auto;">
+      <h1>Word → PDF 转换</h1>
+      <p>支持预览与选择要转换的页面（页面格式示例：1-3,5）。</p>
+
+      <form id="convert-form" class="docx-to-pdf" enctype="multipart/form-data">
+        <label>选择 Word 文件（.doc/.docx）</label>
+        <input type="file" name="file" id="file-input" accept=".doc,.docx" required />
+
+        <div class="actions">
+          <button type="button" id="preview-btn" class="preview-btn btn">预览</button>
+        </div>
+
+        <!-- 进度条区域：前端脚本会在上传/下载时显示进度 -->
+        <div class="convert-progress" style="display:none;margin-top:8px">
+          <div class="progress-bar" style="background:#eee;border-radius:4px;height:12px;overflow:hidden">
+            <div class="progress-fill" style="width:0%;height:100%;background:#4caf50"></div>
+          </div>
+          <div class="progress-text" style="margin-top:6px;font-size:0.9em;color:#666">准备中</div>
+        </div>
+      </form>
+
+      <div id="preview-area" style="margin-top:16px;display:none">
+        <h3>预览</h3>
+        <div class="preview"></div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='scripts/tools/docx_to_pdf.js') }}"></script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 import os
 from sqlalchemy import inspect
 
@@ -38,6 +38,22 @@ def create_app(config_object=None):
             app.register_blueprint(ui_bp)
         except Exception:
             pass
+
+    # debug helper: list registered routes when in DEBUG
+    try:
+        if app.config.get('DEBUG'):
+            @app.route('/__routes__')
+            def _list_routes():
+                rules = []
+                for r in sorted(app.url_map.iter_rules(), key=lambda x: (str(x.rule), x.endpoint)):
+                    rules.append({
+                        'rule': str(r.rule),
+                        'endpoint': r.endpoint,
+                        'methods': sorted([m for m in r.methods if m not in ('HEAD','OPTIONS')])
+                    })
+                return jsonify({'routes': rules})
+    except Exception:
+        pass
 
     # if legacy register_tool_routes exists, call it to add dynamic routes
     try:

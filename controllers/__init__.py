@@ -8,8 +8,8 @@ import re
 bp_api = Blueprint('api', __name__)
 bp_ui = Blueprint('ui', __name__)
 
-
 def _find_decorated_view_names(pkg_dir: Path):
+
     """扫描 controllers 目录下每个模块，找出用 bp_api.route / bp_ui.route 装饰的视图函数名。
 
     返回结构: { 'api': {name: [filenames...]}, 'ui': {name: [filenames...]}}

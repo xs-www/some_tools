@@ -105,11 +105,11 @@ document.addEventListener('DOMContentLoaded', function(){
   async function submitCreateOrUpdate(payload){
     if(currentEditing){
       // PUT to update
-      const r = await apiFetch('/admin/tools/' + encodeURIComponent(currentEditing), {method:'PUT', body: JSON.stringify(payload)})
+      const r = await apiFetch('/admin/update_tools', {method:'POST', body: JSON.stringify(payload)})
       return r
     }else{
       // POST to create
-      const r = await apiFetch('/admin/tools', {method:'POST', body: JSON.stringify(payload)})
+      const r = await apiFetch('/admin/update_tools', {method:'POST', body: JSON.stringify(payload)})
       return r
     }
   }

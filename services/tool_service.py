@@ -5,10 +5,7 @@ class ToolService:
         return ToolDAO.list_tools()
 
     def get_tool(self, slug_or_id):
-        try:
-            return ToolDAO.get_tool_by_slug(slug_or_id)
-        except Exception:
-            return None
+        return ToolDAO.get_tool_by_slug(slug_or_id)
 
     def create_tool(self, **kwargs):
         return ToolDAO.create_tool(**kwargs)

@@ -2,33 +2,8 @@ import os
 import subprocess
 import time
 import traceback
-import tempfile
-from werkzeug.utils import secure_filename
-import shutil
 
 class ConvertService:
-    def __init__(self):
-        pass
-
-    def convert_docx_file(self, file_storage, pages: str = None):
-        """Accept a Werkzeug FileStorage, write to a temp dir, perform conversion and return (out_path, tmpdir).
-
-        Caller is responsible for cleaning up the tmpdir after serving the output file.
-        """
-        tmpdir = tempfile.mkdtemp(prefix='conv_')
-        filename = secure_filename(getattr(file_storage, 'filename', '') or 'upload.docx')
-        in_path = os.path.join(tmpdir, filename)
-        with open(in_path, 'wb') as f:
-            # ensure reading from start
-            try:
-                file_storage.stream.seek(0)
-            except Exception:
-                pass
-            f.write(file_storage.read())
-
-        out_path = self.convert_docx_to_pdf(in_path, tmpdir, pages=pages)
-        return out_path, tmpdir
-
     def convert_docx_to_pdf(self, input_path: str, output_dir: str, pages: str = None) -> str:
         try:
             from docx2pdf import convert as d2p_convert
